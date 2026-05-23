@@ -1,0 +1,31 @@
+name: "T3 Code Codex"
+slug: "t3code_codex"
+version: "0.1.0"
+description: "T3 Code web UI with OpenAI Codex for editing Home Assistant configuration"
+url: "https://github.com/your-user/home-assistant-addons/tree/main/t3code-codex"
+arch:
+  - amd64
+  - aarch64
+startup: application
+boot: manual
+init: false
+stage: experimental
+panel_icon: mdi:code-braces
+panel_title: "T3 Code"
+panel_admin: true
+ingress: true
+ingress_port: 8099
+ingress_stream: true
+map:
+  - type: homeassistant_config
+    read_only: false
+    path: /homeassistant
+  - type: addon_config
+    read_only: false
+    path: /config
+options:
+  openai_api_key: ""
+  t3code_log_level: "Info"
+schema:
+  openai_api_key: "password?"
+  t3code_log_level: "list(Trace|Debug|Info|Warn|Error)"
