@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Add build dependencies needed to compile npm native modules on arm64.
+
 ## 0.1.0
 
 - Initial local add-on packaging for T3 Code and OpenAI Codex CLI.

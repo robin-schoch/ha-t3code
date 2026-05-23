@@ -1,4 +1,4 @@
-ARG BUILD_VERSION=0.1.0
+ARG BUILD_VERSION=0.1.1
 ARG BUILD_ARCH=amd64
 
 FROM node:24-bookworm-slim
@@ -17,10 +17,13 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     bash \
     ca-certificates \
+    g++ \
     git \
     jq \
+    make \
     openssh-client \
     procps \
+    python3 \
     ripgrep \
   && rm -rf /var/lib/apt/lists/*
 
