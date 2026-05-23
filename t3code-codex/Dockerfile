@@ -1,4 +1,4 @@
-ARG BUILD_VERSION=0.1.1
+ARG BUILD_VERSION=0.1.2
 ARG BUILD_ARCH=amd64
 
 FROM node:24-bookworm-slim
@@ -30,6 +30,15 @@ RUN apt-get update \
 RUN npm install -g \
     "t3@${T3_VERSION}" \
     "@openai/codex@${CODEX_VERSION}" \
+  && find /usr/local/lib/node_modules/t3/dist/client -name index.html -print -exec sed -i \
+    -e 's|href="/favicon.ico"|href="./favicon.ico"|g' \
+    -e 's|href="/apple-touch-icon.png"|href="./apple-touch-icon.png"|g' \
+    -e 's|src="/assets/|src="./assets/|g' \
+    -e 's|href="/assets/|href="./assets/|g' \
+    {} \; \
+  && find /usr/local/lib/node_modules/t3/dist/client/assets -name 'index-*.js' -print -exec sed -i \
+    -e 's|new Worker(`/assets/|new Worker(`./assets/|g' \
+    {} \; \
   && npm cache clean --force
 
 COPY run.sh /run.sh

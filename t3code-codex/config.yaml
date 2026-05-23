@@ -1,6 +1,6 @@
 name: "T3 Code Codex"
 slug: "t3code_codex"
-version: "0.1.1"
+version: "0.1.2"
 description: "T3 Code web UI with OpenAI Codex for editing Home Assistant configuration"
 url: "https://github.com/robin-schoch/ha-t3code/tree/main/t3code-codex"
 arch:

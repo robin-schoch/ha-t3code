@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Use relative T3 Code web asset URLs so the UI loads behind Home Assistant Ingress.
+
 ## 0.1.1
 
 - Add build dependencies needed to compile npm native modules on arm64.
