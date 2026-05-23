@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Patch T3 Code client API, WebSocket, and router paths for Home Assistant Ingress.
+
 ## 0.1.2
 
 - Use relative T3 Code web asset URLs so the UI loads behind Home Assistant Ingress.
