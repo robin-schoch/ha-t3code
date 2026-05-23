@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.4
+
+- Patch T3 Code environment descriptor requests for Home Assistant Ingress.
+
 ## 0.1.3
 
 - Patch T3 Code client API, WebSocket, and router paths for Home Assistant Ingress.

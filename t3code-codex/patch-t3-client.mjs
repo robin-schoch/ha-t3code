@@ -51,6 +51,12 @@ indexJs = replaceRequired(
 );
 indexJs = replaceRequired(
   indexJs,
+  "function APe(e,t){let n=new URL(e);return n.pathname=t,n.search=``,n.hash=``,n.toString()}",
+  "function APe(e,t){let n=new URL(e);return n.origin===window.location.origin?n=new URL(t.replace(/^\\/+/,``),new URL(`./`,window.location.href)):n.pathname=t,n.search=``,n.hash=``,n.toString()}",
+  "remote environment API base path",
+);
+indexJs = replaceRequired(
+  indexJs,
   "return t.pathname=`/ws`,t.toString()",
   "return t.pathname=new URL(`./ws`,window.location.href).pathname,t.toString()",
   "websocket path",
