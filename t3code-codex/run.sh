@@ -5,6 +5,7 @@ umask 077
 export HOME=/data
 export T3CODE_HOME=/data/t3code
 export T3CODE_PORT=8099
+export T3CODE_LOG_LEVEL="${T3CODE_LOG_LEVEL:-Info}"
 
 mkdir -p "$T3CODE_HOME" "$HOME/.codex" /config
 remote_url=""
@@ -18,7 +19,8 @@ if [ -f /data/options.json ]; then
     export OPENAI_API_KEY="$OPENAI_API_KEY_FROM_OPTIONS"
   fi
 
-  export T3CODE_LOG_LEVEL="$(printf '%s' "$T3CODE_LOG_LEVEL_FROM_OPTIONS" | tr '[:upper:]' '[:lower:]')"
+  # T3's environment parser accepts Info/Debug/etc., not lowercase CLI values.
+  export T3CODE_LOG_LEVEL="$T3CODE_LOG_LEVEL_FROM_OPTIONS"
 fi
 
 if [ -n "$remote_url" ]; then
@@ -53,7 +55,7 @@ if [ -n "${OPENAI_API_KEY:-}" ]; then
   # Codex app-server needs a saved login; exporting the key alone is insufficient.
   printf '%s' "$OPENAI_API_KEY" | codex -c 'cli_auth_credentials_store="file"' login --with-api-key
 elif [ ! -f "$HOME/.codex/auth.json" ]; then
-  echo "Codex is not authenticated yet. Pair your desktop, then configure Codex on this remote environment in Settings > Providers."
+  echo "No Codex CLI login found. You can use your ChatGPT account: pair your desktop, select Home Assistant in Settings > Providers, and choose Connect with ChatGPT. No API key is required."
 fi
 
 if [ -n "$remote_url" ]; then
@@ -72,5 +74,4 @@ exec t3 serve \
   --host 0.0.0.0 \
   --port "$T3CODE_PORT" \
   --base-dir "$T3CODE_HOME" \
-  --no-browser \
-  --log-level "${T3CODE_LOG_LEVEL:-info}"
+  --no-browser

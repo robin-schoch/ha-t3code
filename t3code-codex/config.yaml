@@ -1,6 +1,6 @@
 name: "T3 Code Codex"
 slug: "t3code_codex"
-version: "0.2.0"
+version: "0.2.2"
 description: "Headless T3 Code server for editing Home Assistant from a remote client"
 url: "https://github.com/robin-schoch/ha-t3code/tree/main/t3code-codex"
 arch:
@@ -28,4 +28,6 @@ options:
 schema:
   openai_api_key: "password?"
   t3code_log_level: "list(Trace|Debug|Info|Warn|Error)"
-  remote_url: "url?"
+  # Home Assistant's URL validator rejects an empty string, even with '?'.
+  # The launcher validates non-empty HTTP(S) origins before creating a link.
+  remote_url: "str?"

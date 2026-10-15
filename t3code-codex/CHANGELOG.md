@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.2
+
+- Preserve the case of `T3CODE_LOG_LEVEL` so pairing and startup no longer fail with a configuration schema error.
+- Exercise the launcher's option-loading environment in the server/authentication smoke test.
+- Clarify that a missing Codex CLI login does not prevent connecting a ChatGPT account through T3.
+
+## 0.2.1
+
+- Fix Home Assistant rejecting the default empty `remote_url` as an invalid URL.
+- Explain the Tailscale URL and optional API key directly in the configuration form.
+- Clarify using a ChatGPT account without an API key.
+
 ## 0.2.0
 
 - Replace the Ingress web UI and client patches with the unmodified T3 Code 0.0.45 headless server.

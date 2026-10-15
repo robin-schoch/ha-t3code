@@ -4,7 +4,9 @@
 import argparse
 import http.cookiejar
 import json
+import os
 from pathlib import Path
+import re
 import shutil
 import socket
 import subprocess
@@ -54,12 +56,53 @@ def main():
             port = listener.getsockname()[1]
         base_url = 'http://127.0.0.1:{}'.format(port)
 
+        # Run real T3 commands with the launcher's option-loading code, so the
+        # environment matches the add-on (not just its command-line flags).
+        options_path = root / 'options.json'
+        options_path.write_text(json.dumps({
+            'openai_api_key': '', 't3code_log_level': 'Info',
+            'remote_url': 'http://homeassistant.example.ts.net:8099',
+        }))
+        options_start = launcher.index('if [ -f /data/options.json ]; then')
+        options_end = launcher.index('\nif [ -n "$remote_url" ]; then', options_start)
+        options_code = launcher[options_start:options_end].replace(
+            '/data/options.json', '"$T3_ADDON_TEST_OPTIONS"')
+        default_log_level = re.search(r'^export T3CODE_LOG_LEVEL=.*$', launcher, re.MULTILINE)
+        config_code = 'set -euo pipefail\n'
+        if default_log_level:
+            config_code += default_log_level.group() + '\n'
+        config_code += options_code
+        environment = os.environ.copy()
+        environment['T3_ADDON_TEST_OPTIONS'] = str(options_path)
+        environment.pop('T3CODE_LOG_LEVEL', None)
+        environment.pop('OPENAI_API_KEY', None)
+        command_prefix = ['bash', '-c', config_code + '\nexec "$@"', 'ha-t3-smoke']
+
+        options_path.unlink()
+        default_result = subprocess.run(
+            ['bash', '-c', config_code + '\nprintf \'%s\' "$T3CODE_LOG_LEVEL"'],
+            env=environment, capture_output=True, text=True, check=True)
+        assert default_result.stdout == 'Info', 'Missing options must default to Info'
+
+        def write_options(log_level):
+            options_path.write_text(json.dumps({
+                'openai_api_key': '', 't3code_log_level': log_level,
+                'remote_url': 'http://homeassistant.example.ts.net:8099',
+            }))
+
         def cli(*arguments):
-            result = subprocess.run([args.t3, *arguments], capture_output=True,
-                                    text=True, timeout=30, cwd=workspace)
+            result = subprocess.run([*command_prefix, args.t3, *arguments],
+                                    capture_output=True, text=True, timeout=30,
+                                    cwd=workspace, env=environment)
             # CLI output can contain a pairing secret. Never print it on failure.
             assert result.returncode == 0, 'T3 CLI command failed: {}'.format(arguments[0])
             return result.stdout
+
+        for log_level in ['Trace', 'Debug', 'Info', 'Warn', 'Error']:
+            write_options(log_level)
+            json.loads(cli('auth', 'pairing', 'list', '--base-dir', str(state), '--json'))
+        write_options('Info')
+        print('PASS default and all configured log levels accepted by T3')
 
         issued = json.loads(cli('auth', 'pairing', 'create', '--base-dir', str(state),
                                 '--base-url', base_url, '--ttl', '10m', '--json'))
@@ -83,10 +126,9 @@ def main():
 
         def start(log):
             server = subprocess.Popen([
-                args.t3, 'serve', '--mode', 'web', '--host', '0.0.0.0',
+                *command_prefix, args.t3, 'serve', '--mode', 'web', '--host', '0.0.0.0',
                 '--port', str(port), '--base-dir', str(state), '--no-browser',
-                '--log-level', 'error',
-            ], cwd=workspace, stdout=log, stderr=log)
+            ], cwd=workspace, stdout=log, stderr=log, env=environment)
             try:
                 deadline = time.monotonic() + 30
                 while time.monotonic() < deadline:

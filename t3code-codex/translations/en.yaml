@@ -1,0 +1,19 @@
+configuration:
+  remote_url:
+    name: Tailscale server URL
+    description: >-
+      Enter http://YOUR_HOME_ASSISTANT_TAILSCALE_IP:8099, for example
+      http://100.101.102.103:8099. Use the Home Assistant machine's Tailscale
+      address, not your desktop's address. Enable the matching host port in
+      Network settings. Leave empty to configure later.
+  openai_api_key:
+    name: OpenAI API key (optional)
+    description: >-
+      Leave empty to use your ChatGPT account. After pairing your desktop,
+      select the Home Assistant environment in Settings > Providers and choose
+      Connect with ChatGPT. Only enter a key if you want API billing.
+  t3code_log_level:
+    name: Log level
+    description: Keep Info unless you are troubleshooting startup.
+network:
+  8099/tcp: T3 Code server port for desktop pairing over Tailscale.
