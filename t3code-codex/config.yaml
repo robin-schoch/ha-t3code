@@ -1,7 +1,7 @@
 name: "T3 Code Codex"
 slug: "t3code_codex"
-version: "0.1.4"
-description: "T3 Code web UI with OpenAI Codex for editing Home Assistant configuration"
+version: "0.2.0"
+description: "Headless T3 Code server for editing Home Assistant from a remote client"
 url: "https://github.com/robin-schoch/ha-t3code/tree/main/t3code-codex"
 arch:
   - amd64
@@ -10,12 +10,10 @@ startup: application
 boot: manual
 init: false
 stage: experimental
-panel_icon: mdi:code-braces
-panel_title: "T3 Code"
-panel_admin: true
-ingress: true
-ingress_port: 8099
-ingress_stream: true
+ports:
+  8099/tcp: null
+ports_description:
+  8099/tcp: "T3 Code server for desktop pairing over Tailscale (requires T3 authentication)"
 map:
   - type: homeassistant_config
     read_only: false
@@ -26,6 +24,8 @@ map:
 options:
   openai_api_key: ""
   t3code_log_level: "Info"
+  remote_url: ""
 schema:
   openai_api_key: "password?"
   t3code_log_level: "list(Trace|Debug|Info|Warn|Error)"
+  remote_url: "url?"

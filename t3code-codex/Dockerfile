@@ -1,12 +1,12 @@
-ARG BUILD_VERSION=0.1.4
+ARG BUILD_VERSION=0.2.0
 ARG BUILD_ARCH=amd64
 
 FROM node:24-bookworm-slim
 
 ARG BUILD_VERSION
 ARG BUILD_ARCH
-ARG T3_VERSION=0.0.24
-ARG CODEX_VERSION=0.133.0
+ARG T3_VERSION=0.0.45
+ARG CODEX_VERSION=0.159.0
 
 LABEL \
   io.hass.version="${BUILD_VERSION}" \
@@ -31,9 +31,6 @@ RUN npm install -g \
     "t3@${T3_VERSION}" \
     "@openai/codex@${CODEX_VERSION}" \
   && npm cache clean --force
-
-COPY patch-t3-client.mjs /patch-t3-client.mjs
-RUN node /patch-t3-client.mjs && rm /patch-t3-client.mjs
 
 COPY run.sh /run.sh
 RUN chmod +x /run.sh

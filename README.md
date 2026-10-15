@@ -12,4 +12,6 @@ https://github.com/robin-schoch/ha-t3code
 
 Then install the **T3 Code Codex** add-on from the Add-on Store.
 
+The add-on runs the T3 Code server beside your Home Assistant files. Connect your T3 Code desktop app over Tailscale using the [setup guide](t3code-codex/DOCS.md).
+
 The add-on source lives in [`t3code-codex`](t3code-codex/).
