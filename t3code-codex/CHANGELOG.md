@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4
+
+- Upgrade T3 Code from 0.0.45 to 0.1.2.
+
 ## 0.2.2
 
 - Preserve the case of `T3CODE_LOG_LEVEL` so pairing and startup no longer fail with a configuration schema error.
