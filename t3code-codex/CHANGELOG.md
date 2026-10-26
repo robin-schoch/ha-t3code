@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5
+
+- Add a persistent `server_name` option to distinguish Home Assistant servers in T3 Code.
+- Apply the display name through the add-on container's Linux pretty hostname.
+
 ## 0.2.4
 
 - Upgrade T3 Code from 0.0.45 to 0.1.2.

@@ -1,4 +1,10 @@
 configuration:
+  server_name:
+    name: Server name
+    description: >-
+      Name shown in T3 Code's environment lists and load balancing, for example
+      Home Assistant Home or Home Assistant Rofka. Save and restart the add-on
+      after changing it. Leave empty to use the container hostname.
   remote_url:
     name: Tailscale server URL
     description: >-

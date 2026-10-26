@@ -9,11 +9,13 @@ export T3CODE_LOG_LEVEL="${T3CODE_LOG_LEVEL:-Info}"
 
 mkdir -p "$T3CODE_HOME" "$HOME/.codex" /config
 remote_url=""
+server_name=""
 
 if [ -f /data/options.json ]; then
   OPENAI_API_KEY_FROM_OPTIONS="$(jq -r '.openai_api_key // empty' /data/options.json)"
   T3CODE_LOG_LEVEL_FROM_OPTIONS="$(jq -r '.t3code_log_level // "Info"' /data/options.json)"
   remote_url="$(jq -r '.remote_url // empty' /data/options.json)"
+  server_name="$(jq -r '.server_name // empty' /data/options.json)"
 
   if [ -n "$OPENAI_API_KEY_FROM_OPTIONS" ]; then
     export OPENAI_API_KEY="$OPENAI_API_KEY_FROM_OPTIONS"
@@ -40,6 +42,18 @@ try {
 }
 JS
 fi
+
+# T3 reads Linux's pretty hostname before falling back to the container hostname.
+# This file belongs to the add-on container; the Home Assistant host is unchanged.
+node - "$server_name" <<'SERVER_NAME_JS'
+const { writeFileSync } = require('node:fs');
+const name = process.argv[2] ?? '';
+if (name.length > 80 || /[\u0000-\u001f\u007f"\\]/u.test(name)) {
+  console.error('server_name must be at most 80 characters, without control characters, double quotes, or backslashes.');
+  process.exit(1);
+}
+writeFileSync('/etc/machine-info', `PRETTY_HOSTNAME="${name.trim()}"\n`);
+SERVER_NAME_JS
 
 if [ ! -d /homeassistant ]; then
   echo "The Home Assistant configuration directory is not mounted at /homeassistant."

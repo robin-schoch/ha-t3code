@@ -39,6 +39,20 @@ t3 auth pairing create --base-dir /data/t3code --base-url http://100.101.102.103
 
 Run that command inside the T3 add-on, not another Home Assistant terminal container. Replace the address and port with your own.
 
+## Rename a server
+
+In add-on **Configuration**, set **Server name** (`server_name`), then save and restart the add-on. This option is available in version 0.2.5 and later. Give each installation its own name, for example:
+
+```yaml
+server_name: "Home Assistant Home"
+```
+
+On your second installation, use `server_name: "Home Assistant Rofka"`. Add this alongside the other add-on options, or use the Server name field in the configuration form. If it is hidden, enable **Show unused optional configuration options**.
+
+Reconnect or refresh your T3 client after restarting. The server advertises the new name. If an existing client keeps showing its cached connection name, create a fresh pairing link and use **Add environment** on that client again to refresh its saved label. The server's identity, project files, and Tailscale address are unchanged. Leave the setting empty to return to the container hostname.
+
+T3 Code 0.1.2 reads the Linux `PRETTY_HOSTNAME` from `/etc/machine-info`. The launcher writes this inside the add-on container on every start, using the saved option; it does not rename the Home Assistant host. See the [upstream name resolver](https://github.com/pingdotgg/t3code/blob/v0.1.2/apps/server/src/environment/ServerEnvironmentLabel.ts).
+
 ## Codex authentication
 
 ### Use your ChatGPT account (no API key)
@@ -48,7 +62,7 @@ Run that command inside the T3 add-on, not another Home Assistant terminal conta
 3. Choose **Connect with ChatGPT**, sign in with your OpenAI/ChatGPT account in your desktop browser, and approve the connection. Access and usage depend on your ChatGPT plan and workspace permissions.
 4. Return to T3 Code and select the connected account for a thread in the remote `/homeassistant` project.
 
-If remote sign-in ends on a localhost page that cannot load, paste that page's full URL into T3 Code's sign-in panel. Do not change the URL to your Home Assistant address. T3 handles completion on the remote environment. See [T3 Code's ChatGPT sign-in instructions](https://github.com/pingdotgg/t3code/blob/v0.0.45/docs/user/providers-codex.md#connect-with-chatgpt).
+If remote sign-in ends on a localhost page that cannot load, paste that page's full URL into T3 Code's sign-in panel. Do not change the URL to your Home Assistant address. T3 handles completion on the remote environment. See [T3 Code's ChatGPT sign-in instructions](https://github.com/pingdotgg/t3code/blob/v0.1.2/docs/user/providers-codex.md#connect-with-chatgpt).
 
 This connection is separate from the Codex CLI login. T3 stores its managed account state in its persistent data, and your desktop's local login stays unchanged. No API key or copied authentication file is required for this flow.
 
@@ -68,7 +82,7 @@ For the desktop app, direct HTTP over the Tailscale route is sufficient; Tailsca
 
 The add-on does not bundle Tailscale or share the other add-on's daemon socket. Do not add `--tailscale-serve` to its launcher. If you later want HTTPS for the hosted web client, configure a separate Tailscale Serve/Services endpoint to forward to the published server port, then set `remote_url` to that HTTPS origin. `remote_url` does not create a proxy or certificate.
 
-Upstream references: [T3 Code remote access](https://github.com/pingdotgg/t3code/blob/v0.0.45/docs/user/remote-access.md), [Home Assistant Tailscale configuration](https://github.com/hassio-addons/addon-tailscale/blob/main/tailscale/DOCS.md), and [Home Assistant app port mappings](https://developers.home-assistant.io/docs/apps/configuration/).
+Upstream references: [T3 Code remote access](https://github.com/pingdotgg/t3code/blob/v0.1.2/docs/user/remote-access.md), [Home Assistant Tailscale configuration](https://github.com/hassio-addons/addon-tailscale/blob/main/tailscale/DOCS.md), and [Home Assistant app port mappings](https://developers.home-assistant.io/docs/apps/configuration/).
 
 ## Editing Home Assistant files
 
@@ -111,7 +125,7 @@ Protect add-on backups as they can contain credentials. Changing the network add
 
 ## Updating packaged versions
 
-The Dockerfile pins T3 Code at `0.0.45` and Codex CLI at `0.159.0`, matching T3's [bundled provider compatibility recommendation](https://github.com/pingdotgg/t3code/blob/v0.0.45/apps/server/src/provider/model-manifest.json). Update the build arguments, bump the add-on version in `config.yaml` and the Dockerfile, rebuild, and test startup and desktop pairing. Keep the desktop and server versions compatible. There are no client bundle patches to maintain.
+The Dockerfile pins T3 Code at `0.0.45` and Codex CLI at `0.159.0`, matching T3's [bundled provider compatibility recommendation](https://github.com/pingdotgg/t3code/blob/v0.1.2/apps/server/src/provider/model-manifest.json). Update the build arguments, bump the add-on version in `config.yaml` and the Dockerfile, rebuild, and test startup and desktop pairing. Keep the desktop and server versions compatible. There are no client bundle patches to maintain.
 
 For a local server/authentication smoke test, install the pinned T3 CLI and run:
 
