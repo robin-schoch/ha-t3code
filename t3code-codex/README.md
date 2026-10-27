@@ -1,8 +1,8 @@
 # T3 Code Codex
 
-Run a headless T3 Code server inside Home Assistant and connect your T3 Code desktop app over Tailscale. OpenAI Codex runs in the add-on and can inspect and edit the Home Assistant configuration directory.
+Run a headless T3 Code server inside Home Assistant and connect your T3 Code desktop app over Tailscale. OpenAI Codex and Claude Code CLI run in the add-on and can inspect and edit the Home Assistant configuration directory.
 
-The Home Assistant configuration folder is mounted read-write at `/homeassistant` inside the container. T3 Code and Codex state stay in private persistent add-on storage.
+The Home Assistant configuration folder is mounted read-write at `/homeassistant` inside the container. T3 Code, Codex, and Claude state stay in private persistent add-on storage.
 
 You can use your ChatGPT account without an API key. Leave `openai_api_key` empty, pair your desktop, then select the Home Assistant environment in **Settings > Providers** and choose **Connect with ChatGPT**.
 

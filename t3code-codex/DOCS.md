@@ -1,6 +1,6 @@
 # T3 Code server for Home Assistant
 
-The add-on runs T3 Code and Codex on Home Assistant OS. Your desktop app connects over Tailscale and controls work on the server's files.
+The add-on runs T3 Code, Codex, and Claude Code CLI on Home Assistant OS. Your desktop app connects over Tailscale and controls work on the server's files.
 
 ```text
 T3 Code desktop -> Tailscale -> Home Assistant port 8099
@@ -9,7 +9,7 @@ T3 Code desktop -> Tailscale -> Home Assistant port 8099
 
 ## Upgrade from 0.1.x
 
-Version 0.2.0 removes the Ingress panel and the patched web client. Existing private T3 and Codex data remain under `/data`; back up the add-on before upgrading because newer T3 versions may migrate their database. Follow the pairing steps below after upgrading. Use a desktop version compatible with the packaged T3 server (0.0.45).
+Version 0.2.0 removes the Ingress panel and the patched web client. Existing private T3 and Codex data remain under `/data`; back up the add-on before upgrading because newer T3 versions may migrate their database. Follow the pairing steps below after upgrading. Use a desktop version compatible with the packaged T3 server (0.1.2).
 
 ## Connect your desktop
 
@@ -74,6 +74,12 @@ With the option empty, the server still starts and existing saved CLI credential
 
 See the [official OpenAI authentication documentation](https://developers.openai.com/codex/auth) and [CLI login reference](https://developers.openai.com/codex/cli/reference#codex-login).
 
+## Claude Code CLI
+
+Version 0.2.6 and later includes Claude Code CLI, available as `claude` inside the add-on container. Run `claude --version` to check the installation. To authenticate, open a terminal in this add-on and run `claude`, then use `/login` and complete the browser sign-in. Authenticate inside this container; a login on your desktop or another add-on is separate.
+
+The image and launcher set `HOME=/data`, so Claude settings and credentials under `/data/.claude` and `/data/.claude.json` survive add-on restarts and upgrades.
+
 ## Network access
 
 The server listens inside the container on port `8099`, with T3's own pairing and session authentication enabled. The host port mapping is disabled by default. Publishing it can make it reachable on the LAN as well as Tailscale: setting `remote_url` controls the pairing link, not which interfaces may connect. Restrict access with your host/network policy as needed. Do not forward this port from your internet router.
@@ -110,6 +116,8 @@ Create an `AGENTS.md` file in your Home Assistant configuration root with projec
 /data           Private persistent add-on data
 /data/t3code    T3 Code state (runtime data under userdata/)
 /data/.codex    Codex credentials and state
+/data/.claude   Claude credentials and state
+/data/.claude.json  Claude configuration
 ```
 
 Protect add-on backups as they can contain credentials. Changing the network address does not require moving any project files or credentials.
@@ -125,7 +133,7 @@ Protect add-on backups as they can contain credentials. Changing the network add
 
 ## Updating packaged versions
 
-The Dockerfile pins T3 Code at `0.0.45` and Codex CLI at `0.159.0`, matching T3's [bundled provider compatibility recommendation](https://github.com/pingdotgg/t3code/blob/v0.1.2/apps/server/src/provider/model-manifest.json). Update the build arguments, bump the add-on version in `config.yaml` and the Dockerfile, rebuild, and test startup and desktop pairing. Keep the desktop and server versions compatible. There are no client bundle patches to maintain.
+The Dockerfile pins T3 Code at `0.1.2`, Codex CLI at `0.159.0`, and Claude Code CLI at `2.1.311`, matching T3's [bundled provider compatibility recommendation](https://github.com/pingdotgg/t3code/blob/v0.1.2/apps/server/src/provider/model-manifest.json). Update the build arguments, bump the add-on version in `config.yaml` and the Dockerfile, rebuild, and test startup and desktop pairing. Keep the desktop and server versions compatible. There are no client bundle patches to maintain.
 
 For a local server/authentication smoke test, install the pinned T3 CLI and run:
 

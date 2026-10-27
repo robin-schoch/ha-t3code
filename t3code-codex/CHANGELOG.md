@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6
+
+- Bundle Claude Code CLI 2.1.311 alongside Codex, available as `claude` on both supported architectures.
+- Preserve Claude credentials and settings in private persistent add-on storage.
+
 ## 0.2.5
 
 - Add a persistent `server_name` option to distinguish Home Assistant servers in T3 Code.
