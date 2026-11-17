@@ -1,6 +1,6 @@
 # T3 Code Add-ons
 
-Home Assistant add-on repository for running T3 Code with OpenAI Codex.
+Home Assistant add-on repository for running T3 Code with OpenAI Codex, Claude Code CLI, and Google Antigravity CLI.
 
 ## Installation
 

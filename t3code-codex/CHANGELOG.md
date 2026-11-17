@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.7
+
+- Bundle Google Antigravity CLI 1.5.10 (`agy` and `antigravity`) on `amd64` and `aarch64`, with `agy_acp_server.par` ACP bindings so T3 Code discovers and launches `agy acp` automatically without a separate managed runtime download.
+- Upgrade T3 Code from 0.1.2 to 0.1.9 for native Antigravity CLI ACP support.
+- Preserve Antigravity credentials, provider profiles, and global skills in private persistent add-on storage.
+
 ## 0.2.6
 
 - Bundle Claude Code CLI 2.1.311 alongside Codex, available as `claude` on both supported architectures.

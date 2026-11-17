@@ -6,8 +6,9 @@ export HOME=/data
 export T3CODE_HOME=/data/t3code
 export T3CODE_PORT=8099
 export T3CODE_LOG_LEVEL="${T3CODE_LOG_LEVEL:-Info}"
+export AGY_CLI_DISABLE_AUTO_UPDATE=true
 
-mkdir -p "$T3CODE_HOME" "$HOME/.codex" /config
+mkdir -p "$T3CODE_HOME" "$HOME/.codex" "$HOME/.gemini/antigravity-cli" /config
 remote_url=""
 server_name=""
 
